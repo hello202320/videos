@@ -84,7 +84,6 @@ function App() {
     }
 
     peerConnection.current.disconnect();
-    setIsConnected(false); 
 
     navigate("/");
     window.location.reload(false);
@@ -92,6 +91,7 @@ function App() {
 
   return (
     <div className="App">
+      <h1>ID: {peerId}</h1>
       <input
         type="text"
         value={remotePeerId}
