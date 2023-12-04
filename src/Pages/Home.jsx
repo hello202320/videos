@@ -8,7 +8,6 @@ function App() {
   const [peerId, setPeerId] = useState('');
   const [remotePeerId, setRemotePeerId] = useState('');
   const [qrCode, setQrCode] = useState('')
-  const [isConnected, setIsConnected] = useState(false); 
   const remoteVideo = useRef(null);
   const currentVideo = useRef(null);
   const peerConnection = useRef(null);
@@ -24,6 +23,8 @@ function App() {
       setQrCode('https://v1k.netlify.com/' + id);
     });
 
+ 
+
     peer.on('call', (call) => {
       var getUserMedia =
         navigator.getUserMedia ||
@@ -37,7 +38,6 @@ function App() {
         call.on('stream', function (remoteStream) {
           remoteVideo.current.srcObject = remoteStream;
           remoteVideo.current.play();
-          setIsConnected(true);
         });
       });
     });
@@ -48,6 +48,7 @@ function App() {
       peerConnection.current.destroy();
     };
   }, []);
+
 
   const call = (remotePeerId) => {
     var getUserMedia =
@@ -64,9 +65,13 @@ function App() {
       call.on('stream', (remoteStream) => {
         remoteVideo.current.srcObject = remoteStream;
         remoteVideo.current.play();
-        setIsConnected(true); 
       });
     });
+    setQrCode(`https://v1k.netlify.com/${remotePeerId}`)
+  };
+
+  const remotePeerIdChange = (e) => {
+    setRemotePeerId(e.target.value);
   };
 
   const leaveCall = () => {
@@ -95,17 +100,16 @@ function App() {
       <input
         type="text"
         value={remotePeerId}
-        onChange={(e) => setRemotePeerId(e.target.value)}
+        onChange={remotePeerIdChange}
       />
       <button onClick={() => call(remotePeerId)}>Call</button>
       <button onClick={leaveCall}>Leave Call</button>
-      {isConnected ? null : (
+   
         <QRCode
           value={qrCode}
           size={300}
         />
-      )}
-      {console.log(qrCode)}
+    
       <div>
         <video ref={currentVideo} />
       </div>
