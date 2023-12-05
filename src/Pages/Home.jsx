@@ -24,13 +24,13 @@ function App() {
     });
 
  
-
+     // Event listener for incoming calls
     peer.on('call', (call) => {
       var getUserMedia =
         navigator.getUserMedia ||
         navigator.webkitGetUserMedia ||
         navigator.mozGetUserMedia;
-
+       // Answer the call and display remote video
       getUserMedia({ video: true, audio: true }, (mediaStream) => {
         currentVideo.current.srcObject = mediaStream;
         currentVideo.current.play();
@@ -49,7 +49,7 @@ function App() {
     };
   }, []);
 
-
+    // Function to initiate a call to a remote peer
   const call = (remotePeerId) => {
     var getUserMedia =
       navigator.getUserMedia ||
@@ -74,10 +74,11 @@ function App() {
     setRemotePeerId(e.target.value);
   };
 
+  // Function to leave the call
   const leaveCall = () => {
     const currentUserStream = currentVideo.current.srcObject;
     const remoteUserStream = remoteVideo.current.srcObject;
-
+    //Disconnect video from the current user
     if (currentUserStream) {
       const tracks = currentUserStream.getTracks();
       tracks.forEach((track) => track.stop());
